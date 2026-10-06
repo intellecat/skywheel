@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>astro-wheel demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Symbols&family=Noto+Sans+Symbols+2&family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./demo.css" />
+  </head>
+  <body>
+    <header>
+      <h1>astro-wheel</h1>
+      <p>A composable, framework-agnostic SVG chart wheel. Every chart below is a list of layers.</p>
+      <div class="toggles">
+        <label><input type="checkbox" id="sidereal" /> Sidereal zodiac (Lahiri, 24.2°)</label>
+        <label><input type="checkbox" id="uncertain" /> Ancient Ascendant uncertainty (±1.4°)</label>
+        <button id="download">Download horizon chart as SVG</button>
+      </div>
+      <p class="status" id="status">Hover a planet or angle: the charts are linked with <code>chart.highlight(id)</code>.</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>horizonChart(data)</h2>
+        <p>The astro-map look: the sky above the horizon, the earth below it.</p>
+        <div class="chart" id="horizon"></div>
+      </section>
+
+      <section class="card light">
+        <h2>classicChart(data, { className: 'aw-light' })</h2>
+        <p>A conventional wheel with aspect lines, in the light theme.</p>
+        <div class="chart" id="classic"></div>
+      </section>
+
+      <section class="card wide">
+        <div>
+          <h2>Your own composition</h2>
+          <p>Layers are small factories with options; a custom layer is just <code>{ name, render(ctx) }</code>.</p>
+          <pre><code id="code"></code></pre>
+        </div>
+        <div class="chart" id="custom"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
