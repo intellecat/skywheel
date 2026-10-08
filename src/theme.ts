@@ -150,7 +150,7 @@ export function injectTheme(doc: Document = document): void {
   if (injected.has(doc)) return;
   injected.add(doc);
   const style = doc.createElement('style');
-  style.dataset.astroWheel = '';
+  style.dataset.skywheel = '';
   style.textContent = THEME_CSS;
   doc.head.appendChild(style);
 }

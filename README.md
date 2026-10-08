@@ -1,4 +1,4 @@
-# astro-wheel
+# Skywheel
 
 A composable, framework-agnostic SVG chart wheel for astrology, with astro-map's look: the chart as the sky flattened onto the zodiac.
 
@@ -7,7 +7,7 @@ A composable, framework-agnostic SVG chart wheel for astrology, with astro-map's
 - **Data in, SVG out.** It does no astronomy: give it longitudes from any ephemeris.
 
 ```ts
-import { horizonChart } from 'astro-wheel';
+import { horizonChart } from 'skywheel';
 
 horizonChart(data).mount(document.querySelector('#chart'));
 ```
@@ -16,7 +16,7 @@ horizonChart(data).mount(document.querySelector('#chart'));
 
 The structure follows `@astrologer/react-chart`, without React:
 
-| react-chart | astro-wheel |
+| react-chart | skywheel |
 |---|---|
 | `<AstroChart>` context: centre, radius, rotation | `createChart(data, options)` builds a `ChartContext` with geometry helpers |
 | Components: `<ZodiacWheel />`, `<PlanetRing />` … | Layers: `zodiacRing()`, `planetRing()` … added with `.use()` |
@@ -56,7 +56,7 @@ Every preset is a few lines in [`src/presets.ts`](src/presets.ts). To make your 
 ## Composing
 
 ```ts
-import { createChart, backdrop, zodiacRing, houseCusps, aspectLines, planetRing, radialMarker } from 'astro-wheel';
+import { createChart, backdrop, zodiacRing, houseCusps, aspectLines, planetRing, radialMarker } from 'skywheel';
 
 const chart = createChart(data, { layout: { planet: 0.68 } }).use(
   backdrop(),
@@ -87,7 +87,7 @@ Layers draw in order, later on top.
 A layer is `{ name, render(ctx) }` returning SVG markup. The context supplies the geometry:
 
 ```ts
-import { h, type Layer } from 'astro-wheel';
+import { h, type Layer } from 'skywheel';
 
 const hourMarker: Layer = {
   name: 'hour-marker',

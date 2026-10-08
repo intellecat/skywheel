@@ -1,4 +1,4 @@
-import type { WheelData } from 'astro-wheel';
+import type { WheelData } from 'skywheel';
 
 // London, 26 September 2026, 11:21 BST (10:21 UT), Placidus houses.
 // Longitudes from the Swiss Ephemeris; speeds are rounded (only their sign matters here: retrograde).

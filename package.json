@@ -1,5 +1,5 @@
 {
-  "name": "astro-wheel",
+  "name": "skywheel",
   "version": "0.1.0",
   "private": true,
   "description": "Composable, framework-agnostic SVG chart wheel: the sky flattened onto the zodiac.",

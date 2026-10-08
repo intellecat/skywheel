@@ -1,4 +1,4 @@
-// astro-wheel: a composable, framework-agnostic SVG chart wheel.
+// skywheel: a composable, framework-agnostic SVG chart wheel.
 
 export { Chart, createChart, type MountHandlers, type MountOptions, type SvgOptions } from './chart.js';
 export { horizonChart, classicChart, biWheelChart, type HorizonChartOptions, type BiWheelOptions } from './presets.js';

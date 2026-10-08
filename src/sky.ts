@@ -12,7 +12,7 @@ export const dayFactor = (sunAltitude: number) => smoothstep(-12, 6, sunAltitude
 
 export function parseColor(hex: string): Rgb {
   const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(hex.trim());
-  if (!m) throw new Error(`astro-wheel: expected a #rrggbb colour, got "${hex}"`);
+  if (!m) throw new Error(`skywheel: expected a #rrggbb colour, got "${hex}"`);
   return [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255];
 }
 

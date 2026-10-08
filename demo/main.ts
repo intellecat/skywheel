@@ -12,7 +12,7 @@ import {
   type Chart,
   type Layer,
   type WheelData,
-} from 'astro-wheel';
+} from 'skywheel';
 import { LONDON_2026 } from './sample';
 
 const $ = (id: string) => document.getElementById(id)!;

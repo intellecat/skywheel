@@ -9,7 +9,7 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "paths": { "astro-wheel": ["./src/index.ts"] }
+    "paths": { "skywheel": ["./src/index.ts"] }
   },
   "include": ["src", "demo"]
 }
