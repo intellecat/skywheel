@@ -42,7 +42,7 @@ export const BODY_STYLES: Readonly<Record<string, BodyStyle>> = {
   saturn: { name: 'Saturn', glyph: t('♄'), color: '#d8c592' },
   uranus: { name: 'Uranus', glyph: t('♅'), color: '#86dcec' },
   neptune: { name: 'Neptune', glyph: t('♆'), color: '#8ea2ff' },
-  pluto: { name: 'Pluto', glyph: t('♇'), color: '#c3a3d9' },
+  pluto: { name: 'Pluto', glyph: t('⯓'), color: '#c3a3d9' },
   node: { name: 'North Node', glyph: t('☊'), color: '#b9c3d9' },
   chiron: { name: 'Chiron', glyph: '⚷', color: '#a5d68f' },
 };
