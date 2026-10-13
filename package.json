@@ -21,7 +21,9 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --test test/*.test.mjs"
+    "test": "npm run build && node --test test/*.test.mjs",
+    "docs": "npm run build && node docs/build.mjs",
+    "prepare": "npm run build"
   },
   "keywords": [
     "astrology",
