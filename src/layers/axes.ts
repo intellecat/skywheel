@@ -31,6 +31,7 @@ export const alongHorizon = (c: ChartContext, content: string) =>
 /**
  * The chart's horizon (Ascendant–Descendant) and meridian (MC–IC) lines. On a wheel with the
  * Ascendant on the left the horizon is horizontal: everything above it is above the observer's horizon.
+ * Draws nothing for an angle the data doesn't have (an unknown birth time).
  */
 export function horizonAxes(opts: HorizonAxesOptions = {}): Layer {
   return {
@@ -43,7 +44,8 @@ export function horizonAxes(opts: HorizonAxesOptions = {}): Layer {
         const [x2, y2] = c.point(r, b);
         return h('line', { class: cls, x1, y1, x2, y2 });
       };
-      let out = (opts.meridian !== false ? line('aw-meridian', mc, mc + 180) : '') + line('aw-horizon', asc, asc + 180);
+      if (asc === undefined) return opts.meridian !== false && mc !== undefined ? line('aw-meridian', mc, mc + 180) : '';
+      let out = (opts.meridian !== false && mc !== undefined ? line('aw-meridian', mc, mc + 180) : '') + line('aw-horizon', asc, asc + 180);
 
       if (opts.captions !== false) {
         const t = { ...CAPTIONS, ...(typeof opts.captions === 'object' ? opts.captions : {}) };

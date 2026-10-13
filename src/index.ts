@@ -1,7 +1,7 @@
 // skywheel: a composable, framework-agnostic SVG chart wheel.
 
 export { Chart, createChart, type MountHandlers, type MountOptions, type SvgOptions } from './chart.js';
-export { horizonChart, classicChart, biWheelChart, type HorizonChartOptions, type BiWheelOptions } from './presets.js';
+export { horizonChart, classicChart, biWheelChart, multiWheelChart, type HorizonChartOptions, type BiWheelOptions, type MultiWheelOptions } from './presets.js';
 
 // Layers
 export { backdrop, ring, skyEarth, type SkyEarthOptions } from './layers/background.js';
@@ -12,6 +12,7 @@ export { angleLabels, sectLabel, type AngleId, type AngleLabelsOptions, type Sec
 export { ascUncertainty, type AscUncertaintyOptions } from './layers/uncertainty.js';
 export { planetRing, type PlanetRingOptions } from './layers/planets.js';
 export { lineMarker, radialMarker, type MarkerRenderer, type MarkerPlacement } from './layers/markers.js';
+export { dignityRing, CHALDEAN_DECANS, EGYPTIAN_TERMS, type DignityRingOptions, type DignitySegment } from './layers/dignities.js';
 export { aspectLines, crossAspectLines, type AspectLinesOptions, type CrossAspectLinesOptions } from './layers/aspects.js';
 export {
   arcBand,
@@ -38,9 +39,9 @@ export {
 export { h, esc, type Attrs } from './svg.js';
 export { DEG, norm360, angleDiff, polar, sectorPath, slicePath, fmt } from './geometry.js';
 export { spread, type Spread } from './collision.js';
-export { ASPECTS, computeAspects, computeCrossAspects, type AspectDef, type AspectOptions } from './aspects.js';
+export { ASPECTS, MINOR_ASPECTS, aspectDef, isMajor, computeAspects, computeCrossAspects, type AspectDef, type AspectOptions } from './aspects.js';
 export { SIGNS, BODY_STYLES, formatZodiac, type Sign, type BodyStyle, type Element } from './symbols.js';
-export { DEFAULT_LAYOUT, createContext, resolveBody } from './context.js';
+export { DEFAULT_LAYOUT, createContext, resolveBody, autoGlyphScale } from './context.js';
 export { dayFactor } from './sky.js';
 export { THEME_CSS, injectTheme } from './theme.js';
 
@@ -48,8 +49,12 @@ export type {
   WheelData,
   WheelBody,
   ResolvedBody,
+  WheelRing,
+  ResolvedRing,
   Aspect,
   AspectType,
+  MajorAspectType,
+  MinorAspectType,
   Layout,
   ChartOptions,
   ChartWords,

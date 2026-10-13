@@ -35,6 +35,7 @@ export const THEME_CSS = /* css */ `
   --aw-square: #ff7a66;
   --aw-trine: #7ed39a;
   --aw-opposition: #ff5f7e;
+  --aw-minor: #a9b4cc;
   overflow: visible;
   font-family: var(--aw-font);
 }
@@ -74,6 +75,7 @@ export const THEME_CSS = /* css */ `
   --aw-earth-element: #5f8f35;
   --aw-air: #c9a227;
   --aw-water: #2f7fca;
+  --aw-minor: #6b7590;
 }
 .aw-chart text { dominant-baseline: central; text-anchor: middle; }
 .aw-backdrop { fill: var(--aw-backdrop); }
@@ -101,10 +103,13 @@ export const THEME_CSS = /* css */ `
 .aw-angle-degree { fill: var(--aw-accent-text); fill-opacity: 0.85; font: 11px var(--aw-font), var(--aw-font-symbols); }
 .aw-angle-mc .aw-angle-name, .aw-angle-ic .aw-angle-name,
 .aw-angle-mc .aw-angle-degree, .aw-angle-ic .aw-angle-degree { fill: var(--aw-meridian-text); }
+.aw-angle-pointer { stroke: var(--aw-accent); stroke-opacity: 0.5; stroke-width: 1; }
+.aw-angle.aw-outer .aw-angle-name { font-size: 10.5px; }
+.aw-angle.aw-outer .aw-angle-name, .aw-angle.aw-outer .aw-angle-degree { fill-opacity: 0.7; }
 .aw-angle.aw-hl .aw-hit { fill: color-mix(in srgb, var(--aw-accent) 14%, transparent); stroke: var(--aw-accent); stroke-opacity: 0.6; }
 .aw-hit { fill: transparent; cursor: pointer; }
 .aw-body { cursor: pointer; }
-.aw-glyph { font: 23px var(--aw-font-symbols); fill: var(--aw-c); pointer-events: none; }
+.aw-glyph { font-family: var(--aw-font-symbols); font-size: calc(var(--aw-glyph-size, 23px) * var(--aw-glyph-scale, 1)); fill: var(--aw-c); pointer-events: none; }
 .aw-degree { fill: var(--aw-text); font: 10.5px var(--aw-font); pointer-events: none; }
 .aw-retro { fill: var(--aw-retro); font-size: 9px; }
 .aw-halo { fill: var(--aw-halo); stroke: var(--aw-c); stroke-width: 1.5; opacity: 0; transition: opacity 0.15s; }
@@ -117,19 +122,23 @@ export const THEME_CSS = /* css */ `
 .aw-aspect-square { stroke: var(--aw-square); }
 .aw-aspect-trine { stroke: var(--aw-trine); }
 .aw-aspect-opposition { stroke: var(--aw-opposition); }
-.aw-aspect-dot { stroke: none; fill: currentColor; }
+.aw-aspect-minor { stroke: var(--aw-minor); stroke-dasharray: 3 3; }
+.aw-aspect-dot { stroke: none; fill: var(--aw-minor); }
 .aw-aspect-conjunction .aw-aspect-dot { fill: var(--aw-conjunction); }
 .aw-aspect-sextile .aw-aspect-dot { fill: var(--aw-sextile); }
 .aw-aspect-square .aw-aspect-dot { fill: var(--aw-square); }
 .aw-aspect-trine .aw-aspect-dot { fill: var(--aw-trine); }
 .aw-aspect-opposition .aw-aspect-dot { fill: var(--aw-opposition); }
-.aw-outer .aw-glyph { font-size: 20px; }
+.aw-outer { --aw-glyph-size: 20px; }
 .aw-outer .aw-degree { font-size: 9.5px; }
 .aw-aspect-glyph { stroke: none; font: 11px var(--aw-font-symbols); paint-order: stroke; }
 .aw-has-hl .aw-aspect:not(.aw-hl) { opacity: 0.12; }
 .aw-asc-band { fill: var(--aw-accent); fill-opacity: 0.35; stroke: var(--aw-accent); stroke-opacity: 0.7; stroke-width: 0.8; }
 .aw-asc-band-label { fill: var(--aw-accent-text); font: 600 10px var(--aw-font); }
 .aw-sign-glyph.aw-dim { opacity: 0.35; }
+.aw-dignity { fill: var(--aw-ring); fill-opacity: 0.05; stroke: var(--aw-sign-line); stroke-width: 0.8; }
+.aw-dignity-odd { fill-opacity: 0.12; }
+.aw-dignity-glyph { font: 10px var(--aw-font-symbols); pointer-events: none; }
 .aw-degree-label { fill: var(--aw-text); font: 10px var(--aw-font); }
 .aw-band { fill: var(--aw-accent); fill-opacity: 0.18; stroke: none; }
 .aw-radial, .aw-chord { stroke: var(--aw-ring); stroke-width: 1; }

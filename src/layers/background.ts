@@ -21,6 +21,7 @@ export interface SkyEarthOptions {
 /**
  * The half of the zodiac above the horizon, tinted with the colour of the sky, and the half below it
  * in earth tones. With the Ascendant on the left this is simply the top and bottom of the wheel.
+ * Without an Ascendant there is no horizon: it draws a plain backdrop instead.
  */
 export function skyEarth(opts: SkyEarthOptions = {}): Layer {
   const night = parseColor(opts.night ?? NIGHT_SKY);
@@ -30,6 +31,7 @@ export function skyEarth(opts: SkyEarthOptions = {}): Layer {
     render: (c) => {
       const r = opts.radius ?? c.r.zodiacInner;
       const { asc, sunAltitude } = c.data;
+      if (asc === undefined) return h('circle', { class: 'aw-backdrop', r: c.r.outer });
       const day = sunAltitude === undefined ? 0 : dayFactor(sunAltitude);
       const id = `${c.uid}-sky`;
       return (

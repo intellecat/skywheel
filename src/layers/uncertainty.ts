@@ -23,7 +23,7 @@ export function ascUncertainty(opts: AscUncertaintyOptions = {}): Layer {
       const half = (norm360(b - a) / 2).toFixed(1);
       const outer = opts.outer ?? c.r.outer + c.radius * 0.04;
       let out = h('path', { class: 'aw-asc-band', d: c.sector(opts.inner ?? c.r.zodiacInner, outer, a, b) }, h('title', {}, `Ascendant uncertain by ±${half}°`));
-      if (opts.label !== false) {
+      if (opts.label !== false && c.data.asc !== undefined) {
         const [x, y] = c.point(c.r.outer + c.radius * 0.073, c.data.asc);
         out += h('text', { class: 'aw-asc-band-label', x, y: y + 22 }, `±${half}°`);
       }

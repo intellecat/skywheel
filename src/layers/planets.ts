@@ -24,10 +24,13 @@ export interface PlanetRingOptions {
   exclude?: string[];
   marker?: MarkerRenderer;
   /**
-   * Which set to draw: the chart's `bodies` (default) or a bi-wheel's `outer` bodies. Outer bodies
-   * are focused and highlighted as 'o:' + id (e.g. 'o:mars'), so both rings can hold a Mars.
+   * Which ring to draw: the chart's `bodies` ('inner' or 0, the default), a bi-wheel's `outer`
+   * bodies ('outer' or 1), or a further ring (2, 3 …). Outer bodies are focused and highlighted as
+   * 'o:' + id (e.g. 'o:mars'), then 'o2:', 'o3:', so every ring can hold a Mars.
    */
-  source?: 'inner' | 'outer';
+  source?: 'inner' | 'outer' | number;
+  /** Size of every glyph in this ring relative to the default (e.g. 0.8 on a crowded tri-wheel). */
+  glyphScale?: number;
 }
 
 /**
@@ -46,9 +49,11 @@ export function planetRing(opts: PlanetRingOptions = {}): Layer {
       const tickR = opts.tickRadius ?? c.r.zodiacInner;
       const halo = c.radius * 0.057;
 
-      const outer = opts.source === 'outer';
-      const focusId = (id: string) => (outer ? `o:${id}` : id);
-      return spread((outer ? c.outerBodies : c.bodies).filter(keep), opts.gap ?? 9)
+      const k = opts.source === 'outer' ? 1 : opts.source === 'inner' || opts.source === undefined ? 0 : opts.source;
+      const ring = c.rings[k];
+      if (!ring) return '';
+      const outer = k > 0;
+      return spread(ring.bodies.filter(keep), opts.gap ?? 9)
         .map(({ item: b, display }) => {
           const [gx, gy] = c.point(glyphR, display);
           const [tx, ty] = c.point(degreeR, display);
@@ -57,14 +62,15 @@ export function planetRing(opts: PlanetRingOptions = {}): Layer {
           const min = opts.minutes ? `${String(Math.floor((z - deg) * 60)).padStart(2, '0')}′` : '';
           const retro = opts.retrograde !== false && b.retrograde ? h('tspan', { class: 'aw-retro' }, '℞') : '';
           const below = b.alt !== undefined ? b.alt < 0 : !c.isAboveHorizon(b.lon);
+          const scale = b.glyphScale * (opts.glyphScale ?? 1);
           return (
             marker(c, b, { lon: b.lon, display, tickRadius: tickR, glyphRadius: glyphR }) +
             h(
               'g',
               {
-                class: `aw-body aw-body-${b.id}${below ? ' aw-below' : ''}${outer ? ' aw-outer' : ''}`,
-                'data-focus': focusId(b.id),
-                style: `--aw-c:${b.color}`,
+                class: `aw-body aw-body-${b.id}${below ? ' aw-below' : ''}${outer ? ` aw-outer aw-r${k}` : ''}`,
+                'data-focus': ring.prefix + b.id,
+                style: `--aw-c:${b.color}${scale !== 1 ? `;--aw-glyph-scale:${Math.round(scale * 1000) / 1000}` : ''}`,
               },
               h('title', {}, esc(b.name)),
               h('circle', { class: 'aw-halo', cx: gx, cy: gy, r: halo }),

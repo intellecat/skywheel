@@ -13,9 +13,32 @@ export interface WheelBody {
   name?: string;
   glyph?: string;
   color?: string;
+  /**
+   * Size of the glyph relative to a single symbol (1). Labels of two or more characters ('☿☊', 'Cu')
+   * are shrunk automatically; set this to override.
+   */
+  glyphScale?: number;
 }
 
-export type AspectType = 'conjunction' | 'sextile' | 'square' | 'trine' | 'opposition';
+export type MajorAspectType = 'conjunction' | 'sextile' | 'square' | 'trine' | 'opposition';
+export type MinorAspectType =
+  | 'semisextile'
+  | 'decile'
+  | 'novile'
+  | 'semisquare'
+  | 'septile'
+  | 'quintile'
+  | 'binovile'
+  | 'biseptile'
+  | 'tredecile'
+  | 'sesquiquadrate'
+  | 'biquintile'
+  | 'quincunx'
+  | 'triseptile'
+  | 'quadnovile'
+  | 'quindecile';
+/** The major and minor aspects skywheel knows, or any other name (drawn as a plain dashed line). */
+export type AspectType = MajorAspectType | MinorAspectType | (string & {});
 
 export interface Aspect {
   a: string;
@@ -23,13 +46,28 @@ export interface Aspect {
   type: AspectType;
   /** Distance from exact, in degrees. */
   orb: number;
+  /** The orb this aspect was allowed (e.g. an applying orb): its line fades towards it. Default: the aspect's default orb. */
+  maxOrb?: number;
+}
+
+/** One ring of bodies beyond the chart's own: transits, progressions, a partner's chart. */
+export interface WheelRing {
+  bodies: WheelBody[];
+  /** This ring's own Ascendant and Midheaven, if it has them (drawn by angleLabels({ rings })). */
+  asc?: number;
+  mc?: number;
+  /** Precomputed aspects from this ring's bodies (a) to the chart's `bodies` (b); otherwise computed. */
+  aspects?: Aspect[];
 }
 
 export interface WheelData {
   bodies: WheelBody[];
-  /** Ascendant and Midheaven, tropical longitude. */
-  asc: number;
-  mc: number;
+  /**
+   * Ascendant and Midheaven, tropical longitude. Leave them out when the time is unknown: the axes,
+   * angle labels and sky/earth halves are then not drawn, and 0° Aries sits on the left.
+   */
+  asc?: number;
+  mc?: number;
   /** Twelve house cusps (tropical), index 0 = 1st house. Omit for a chart without houses. */
   cusps?: number[];
   /** Subtracted from tropical longitudes for sidereal zodiacs. Default 0 (tropical). */
@@ -47,6 +85,14 @@ export interface WheelData {
   outer?: WheelBody[];
   /** Precomputed aspects from `outer` bodies (a) to `bodies` (b); otherwise computed. */
   crossAspects?: Aspect[];
+  /** The outer chart's Ascendant and Midheaven (a transit or partner chart with a known time). */
+  outerAsc?: number;
+  outerMc?: number;
+  /**
+   * More rings, outward after `outer`: a tri-wheel is natal + `outer` + one ring here (or, without
+   * `outer`, two rings here). Ring n's bodies are focused as 'o<n>:' + id ('o:' for the first).
+   */
+  rings?: WheelRing[];
 }
 
 /** Ring radii as fractions of the chart radius; every layer defaults to these. */
@@ -89,7 +135,18 @@ export interface ChartWords {
   /** Aries to Pisces. */
   signs?: readonly string[];
   /** "Venus square Mars (orb 1.2°)": the title of an aspect line, from the two bodies' names. */
-  aspect?: (a: string, b: string, type: AspectType, orb: number) => string;
+  // A method, so a function written for the five major aspects alone is still accepted.
+  aspect?(a: string, b: string, type: AspectType, orb: number): string;
+}
+
+export interface ResolvedRing {
+  bodies: readonly ResolvedBody[];
+  asc?: number;
+  mc?: number;
+  aspects?: Aspect[];
+  /** '' for the chart's own ring, 'o:' for the first outer ring, then 'o2:', 'o3:' … */
+  prefix: string;
+  body(id: string): ResolvedBody | undefined;
 }
 
 /** A body with its display defaults filled in. */
@@ -98,6 +155,8 @@ export interface ResolvedBody extends WheelBody {
   glyph: string;
   color: string;
   retrograde: boolean;
+  /** Glyph size relative to a single symbol (from glyphScale, or shrunk for long labels). */
+  glyphScale: number;
 }
 
 export type Point = [number, number];
@@ -115,6 +174,11 @@ export interface ChartContext {
   readonly bodies: readonly ResolvedBody[];
   /** The bi-wheel's second set of bodies (empty for a single chart). */
   readonly outerBodies: readonly ResolvedBody[];
+  /**
+   * Every ring, from the chart's own (0) outward: `bodies`, then `outer`, then `rings`. Each has its
+   * resolved bodies, its angles if known, and the prefix of its focus ids ('', 'o:', 'o2:' …).
+   */
+  readonly rings: readonly ResolvedRing[];
   /** Screen position at radius r and ecliptic longitude lon. */
   point(r: number, lon: number): Point;
   /** Annular sector from longitude a anticlockwise to b. */
@@ -129,7 +193,7 @@ export interface ChartContext {
   visible(lon: number): boolean;
   /** Visible longitudes as [from, to] (anticlockwise); the whole circle without a lens. */
   readonly span: [number, number];
-  /** Whether an ecliptic longitude is in the half of the zodiac above the horizon. */
+  /** Whether an ecliptic longitude is in the half of the zodiac above the horizon (always true without an Ascendant). */
   isAboveHorizon(lon: number): boolean;
   /** Screen angle of the horizon line, in degrees (180 when the Ascendant is on the left). */
   readonly horizonAngle: number;

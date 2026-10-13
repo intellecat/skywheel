@@ -18,6 +18,11 @@ export interface MountOptions extends MountHandlers {
 export interface SvgOptions {
   /** Embed the theme stylesheet so the SVG looks right on its own. Default true. */
   embedStyles?: boolean;
+  /**
+   * More CSS to embed after the theme: your overrides and the styles of your own layers, which the
+   * page applies to a mounted chart but a standalone file would otherwise lose.
+   */
+  css?: string;
   width?: number | string;
   height?: number | string;
 }
@@ -72,7 +77,9 @@ export class Chart {
   /** A complete, standalone SVG document. */
   toSVG(opts: SvgOptions = {}): string {
     const size = this.context.size;
-    const style = opts.embedStyles === false ? '' : `<style>${THEME_CSS}</style>`;
+    const css = (opts.embedStyles === false ? '' : THEME_CSS) + (opts.css ?? '');
+    // The CSS goes in a CDATA section, so selectors like 'a > b' and '&' stay valid XML.
+    const style = css ? `<style><![CDATA[${css.replace(/]]>/g, ']]]]><![CDATA[>')}]]></style>` : '';
     const title = this.options.title ? h('title', {}, esc(this.options.title)) : '';
     return h(
       'svg',

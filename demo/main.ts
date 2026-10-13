@@ -21,10 +21,12 @@ const $ = (id: string) => document.getElementById(id)!;
 const hourMarker: Layer = {
   name: 'hour-marker',
   render: (c) => {
-    const tip = c.point(c.r.outer + 4, c.data.asc);
-    const [x, y] = c.point(c.r.outer + 26, c.data.asc);
-    const [bx1, by1] = c.point(c.r.outer + 16, c.data.asc - 2.2);
-    const [bx2, by2] = c.point(c.r.outer + 16, c.data.asc + 2.2);
+    const asc = c.data.asc;
+    if (asc === undefined) return '';
+    const tip = c.point(c.r.outer + 4, asc);
+    const [x, y] = c.point(c.r.outer + 26, asc);
+    const [bx1, by1] = c.point(c.r.outer + 16, asc - 2.2);
+    const [bx2, by2] = c.point(c.r.outer + 16, asc + 2.2);
     return (
       h('path', { class: 'demo-arrow', d: `M${tip[0]},${tip[1]} L${bx1},${by1} L${bx2},${by2} Z` }) +
       h('text', { class: 'demo-note', x, y, transform: `rotate(-90 ${x} ${y})` }, 'hōroskopos')
@@ -62,7 +64,7 @@ const describe = (id: string | null) => {
   if (!id) return 'Hover a planet or angle: the charts are linked with <code>chart.highlight(id)</code>.';
   const body = charts[0].context.body(id);
   if (body) return `<b>${body.name}</b> · ${formatZodiac(charts[0].context.zodiacLon(body.lon), true)}${body.retrograde ? ' · ℞ retrograde' : ''}`;
-  const lon = { asc: data.asc, dsc: data.asc + 180, mc: data.mc, ic: data.mc + 180 }[id];
+  const lon = { asc: data.asc!, dsc: data.asc! + 180, mc: data.mc!, ic: data.mc! + 180 }[id];
   return lon === undefined ? id : `<b>${id.toUpperCase()}</b> · ${formatZodiac(charts[0].context.zodiacLon(lon), true)}`;
 };
 const show = (id: string | null) => {
@@ -83,7 +85,7 @@ const update = () => {
   data = {
     ...LONDON_2026,
     ayanamsa: ($('sidereal') as HTMLInputElement).checked ? 24.23 : 0,
-    ascRange: ($('uncertain') as HTMLInputElement).checked ? [LONDON_2026.asc - 1.4, LONDON_2026.asc + 1.4] : undefined,
+    ascRange: ($('uncertain') as HTMLInputElement).checked ? [LONDON_2026.asc! - 1.4, LONDON_2026.asc! + 1.4] : undefined,
   };
   for (const c of charts) c.setData(data);
   show(shown);
