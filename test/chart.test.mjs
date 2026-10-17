@@ -301,3 +301,45 @@ test('tri- and quad-wheels: every ring drawn, with its own focus ids and aspects
   // planetRing({ source: 2 }) on a chart with fewer rings draws nothing.
   assert.equal(createChart(DATA).use(planetRing({ source: 2 }), crossAspectLines({ ring: 3 })).render(), '<g class="aw-layer aw-layer-planets"></g><g class="aw-layer aw-layer-cross-aspects"></g>');
 });
+
+// Styled charts: presets, schemes, legibility guards, drawn symbols.
+import { styledChart, STYLE_PRESETS, COLOUR_SCHEMES, DEFAULT_STYLE, schemeColours, legible, GLYPHS, SIGN_IDS } from '../dist/index.js';
+
+const NATAL = { ...DATA, bodies: [...DATA.bodies, { id: 'node', lon: 216.4 }, { id: 'chiron', lon: 173.3, speed: -0.08 }] };
+
+test('every preset draws, with and without a birth time', () => {
+  const { asc, mc, cusps, ...noTime } = NATAL;
+  for (const p of STYLE_PRESETS) {
+    const svg = styledChart(NATAL, p.style).toSVG();
+    assert.match(svg, /^<svg xmlns/, p.id);
+    assert.match(svg, /data-focus="sun"/, p.id);
+    const bare = styledChart(noTime, p.style).toSVG({ embedStyles: false });
+    assert.match(bare, /data-focus="sun"/, `${p.id} without a time`);
+    assert.doesNotMatch(bare, /data-focus="(mc|dc|ic|sunrise|rising)"|class="aw-horizon"/, `${p.id} without a time`);
+  }
+});
+
+test('the style adds its points: South Node, the four angles', () => {
+  const chalk = STYLE_PRESETS.find((p) => p.id === 'chalk').style;
+  const svg = styledChart(NATAL, chalk).toSVG({ embedStyles: false });
+  for (const id of ['south-node', 'sunrise', 'dc', 'mc', 'ic']) assert.match(svg, new RegExp(`data-focus="${id}"`));
+  assert.doesNotMatch(styledChart(NATAL, { ...chalk, southNode: false, anglePoints: false }).toSVG(), /data-focus="(south-node|mc)"/);
+});
+
+test('colours that would not read are adjusted, and named', () => {
+  const s = { ...DEFAULT_STYLE, ink: DEFAULT_STYLE.bg };
+  const { adjusted } = legible(s);
+  assert.ok(adjusted.includes('lines'));
+  assert.deepEqual(legible(DEFAULT_STYLE).adjusted, []);
+  for (const sc of COLOUR_SCHEMES) assert.ok(schemeColours(sc.id).bg);
+});
+
+test('every planet, point and sign has a drawn symbol', () => {
+  for (const id of ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'node', 'south-node', 'chiron', 'rising', 'sunrise', ...SIGN_IDS]) assert.ok(GLYPHS[id], id);
+});
+
+test('aspects drawn thicker when exact carry their own width', () => {
+  const print = STYLE_PRESETS.find((p) => p.id === 'print').style;
+  const svg = styledChart(NATAL, print).toSVG({ embedStyles: false });
+  assert.match(svg, /class="aw-aspect[^"]*"[^>]*stroke-width="[\d.]+"/);
+});

@@ -123,6 +123,25 @@ const hourMarker: Layer = {
 
 `h(tag, attrs, ...children)` builds elements. Attribute values are escaped automatically. Children are inserted as-is, so wrap any text that comes from data in `esc()`.
 
+## Styled charts
+
+One renderer whose every part is a setting: the zodiac ring, houses, angles, planets, their labels, aspects, centre and background. Eight presets and ten colour schemes are starting points; any value can be changed.
+
+```ts
+import { styledChart, STYLE_PRESETS, schemeColours } from 'skywheel';
+
+const night = STYLE_PRESETS.find((p) => p.id === 'night')!.style;
+const { chart, adjusted } = styledChart(data, { ...night, ...schemeColours('midnight'), pSize: 1.4 });
+chart.toSVG();
+```
+
+- **Symbols are drawn**, not taken from a font, so a chart looks the same on every device and in saved images (`GLYPHS`, `glyphPath`). Each is sized optically, so the Sun and Mercury look equally large.
+- **Every ring has its own room**: house numbers, degree labels and planets cannot run into each other, and crowded planets spread far enough for their labels too.
+- **Legibility guards**: a colour that would not read against what is behind it is moved toward black or white, and `adjusted` names what changed.
+- **Charts without a birth time** (no `asc`, `mc`, `cusps`) draw without houses and angles.
+
+Presets: `astrologer`, `table`, `mono`, `night`, `lilac`, `print`, `chalk`, `ink`. Schemes: `parchment`, `paper`, `fog`, `sage`, `rose`, `lilac`, `chalk`, `ink`, `night`, `midnight`.
+
 ## Live charts and export
 
 ```ts

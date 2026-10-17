@@ -35,6 +35,25 @@ export {
   type TrackOptions,
 } from './layers/marks.js';
 
+// Styled charts: every part a setting, with presets and colour schemes
+export {
+  styledChart,
+  legible,
+  contrast,
+  schemeColours,
+  DEFAULT_STYLE,
+  STYLE_PRESETS,
+  COLOUR_SCHEMES,
+  type ChartStyle,
+  type StyledChart,
+  type StyledOptions,
+  type StylePreset,
+  type ColourScheme,
+  type SchemeColours,
+  type Adjustment,
+} from './styled.js';
+export { GLYPHS, SIGN_IDS, glyphPath } from './glyphs.js';
+
 // Building blocks for custom layers
 export { h, esc, type Attrs } from './svg.js';
 export { DEG, norm360, angleDiff, polar, sectorPath, slicePath, fmt } from './geometry.js';
