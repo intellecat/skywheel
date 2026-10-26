@@ -127,6 +127,11 @@ export interface ChartOptions {
   lens?: { center: number; zoom: number };
   /** Accessible title. */
   title?: string;
+  /**
+   * A fixed id for the chart's internal SVG ids (gradients, filters), so the same chart renders the
+   * same markup on a server and in the browser. Default: counted per page.
+   */
+  id?: string;
   /** Words shown in tooltips, for another language: the twelve sign names, and an aspect's title. English by default. */
   words?: ChartWords;
 }

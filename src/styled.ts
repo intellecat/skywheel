@@ -600,7 +600,7 @@ export function styledChart(data: WheelData, style: ChartStyle, options: StyledO
         ]
       : []),
   ];
-  const cls = `aw-styled-${++instances}`;
+  const cls = `aw-styled-${options.id ?? ++instances}`;
   const types = s.aSet === 'all' ? [...MAJOR, ...MINOR] : MAJOR;
   const { fonts: _f, labels: _l, ...chartOptions } = options;
   const chart = createChart({ ...data, bodies, aspects: undefined }, { ...chartOptions, size, radius: R, className: cls }).use(

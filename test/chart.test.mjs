@@ -343,3 +343,11 @@ test('aspects drawn thicker when exact carry their own width', () => {
   const svg = styledChart(NATAL, print).toSVG({ embedStyles: false });
   assert.match(svg, /class="aw-aspect[^"]*"[^>]*stroke-width="[\d.]+"/);
 });
+
+test('a chart with a fixed id renders the same markup every time', () => {
+  const style = STYLE_PRESETS.find((p) => p.id === 'night').style;
+  const a = styledChart(NATAL, style, { id: 'x' }).toSVG();
+  const b = styledChart(NATAL, style, { id: 'x' }).toSVG();
+  assert.equal(a, b);
+  assert.notEqual(styledChart(NATAL, style).toSVG(), styledChart(NATAL, style).toSVG());
+});

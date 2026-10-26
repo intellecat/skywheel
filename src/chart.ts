@@ -65,7 +65,7 @@ export class Chart {
   }
 
   get context(): ChartContext {
-    return createContext(this.data, this.options, this.uid);
+    return createContext(this.data, this.options, this.options.id ?? this.uid);
   }
 
   /** The chart's inner SVG markup (everything inside <svg>). */
